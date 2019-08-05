@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /* ======================================================================
    Naam Script  : BitRain
 	 Naam         : Jack Reinieren
@@ -23,11 +22,16 @@ class Symbol {
 		this.switchInterval = round(random(2,20));
 		this.pos = createVector(this.x, this.y);
 		this.velocity = createVector(0,this.downForce);
-		this.target = createVector(this.x, this.y); 
-		this.maxspeed = 15;
-		this.maxforce = 3;
+		this.target =createVector(this.x, height); // Deze gebruiken om de streams naar de target te laten zoeken
+		this.maxspeed = 0.5;
+		this.maxforce = 0.1;
 		this.acc = createVector();
+	};
+	
+	applyForce(f) {
+		this.acc.add(f);
 	}
+	
 	
 	SetToZeroOrOne() {
 	  if (frameCount % this.switchInterval == 0) {
@@ -35,64 +39,33 @@ class Symbol {
  		}	
  	};	
 
-	targetMove() {
-		if (this.target.y && this.pos.y >= height) {
-				this.target.y = 0;	
-				this.pos.y = this.target.y;
-
-		} else {
-		this.target.add(0, this.downForce);
-		}
-	};
-	
-	arrive(t){
-		let desired = p5.Vector.sub(t, this.pos);
-		let dMagnitude = desired.mag();
-		let speed = this.maxspeed;
-		const breakDistance = 20;
-		
-		if (dMagnitude < breakDistance) {
-    	speed = map(dMagnitude, 0, breakDistance, 0, speed);
-  	} 
-		desired.setMag(speed);
-  	
-		let steer = p5.Vector.sub(desired, this.velocity);
-		steer.limit(this.maxforce);
-  	
-		return steer;
-	}
-	
 	flee(t) {
 		let desired = p5.Vector.sub(t, this.pos);
-		let dMagnitude = desired.mag();
-		const dBMAT = 50; //distance Between Mouse And Target
-		
-		if (dMagnitude < dBMAT) {
-				desired.setMag(this.maxspeed);
-				desired.mult(-1);
-				let steer = p5.Vector.sub(desired, this.velocity);
-				steer.limit(this.maxforce);
-				return steer;
-			}
-			
+		let d = desired.mag();
+		if (d < 10) {
+			desired.setMag(this.maxspeed);
+			desired.mult(-1);
+			let steer = p5.Vector.sub(desired, this.velocity);
+			steer.limit(this.maxforce);
+			return steer;
+		}
 	}
+
+
 	
-	applyBehaviour(behaviourType) {
-		this.acc.add(behaviourType);
-	}
-	
+	// Hier moeten de functies arrive en flee in opgeroepen worden. 
 	rain() {
 		let mouse = createVector(mouseX, mouseY);
 		let flee = this.flee(mouse);
-		let arrive = this.arrive(this.target);
 		
-		this.targetMove();
-		this.applyBehaviour(arrive);
-		this.applyBehaviour(flee);
-		
-		this.velocity.add(this.acc);
-		this.pos.add(this.velocity);
-		this.acc.mult(0); // resets acceleration
+		if (this.pos.y >= height) {
+				this.pos.y = 0;
+		}	else {
+			this.applyForce(flee)
+			this.velocity.add(this.acc);
+			this.pos.add(this.velocity);
+			
+		}
 	}
 }; //einde Symbol
 
@@ -120,21 +93,26 @@ class Stream {
 	};
 	
 	
-	render() {
-		
-		for(let i =0; i<= this.symbols.length -1; i++) {
-			let symbol = this.symbols[i]	
-				
-			if (symbol.first ) {
-				fill (180, 255, 180);
-			} else {
-				fill(0, 255, 70);
-			}
-			text(symbol.value, symbol.pos.x, symbol.pos.y);
-			symbol.rain();
-			// nodig voor het switchen van de cijfers tijdens het vallen van de 'regen'	
-			  symbol.SetToZeroOrOne();
+	render (){
+		let mouse = createVector(mouseX, mouseY);
+		for(let i =0;i<= this.symbols.length - 1; i++) {
+			let symbol = this.symbols[i]
+			
+				if (symbol.first ) {
+						fill (180, 255, 180);
+				} else {
+						fill(0, 255, 70);
+				}
+				ellipse(symbol.target.x,symbol.target.y, 50, 50);
+				text(symbol.value, symbol.pos.x, symbol.pos.y);
+				symbol.rain();
+				symbol.SetToZeroOrOne(); // nodig voor het switchen van de cijfers tijdens het vallen van de 'regen'
+			//symbol.applyForce(symbol.arrive);
+			//symbol.applyForce(symbol.flee);
+				//symbol.flee(mouseX, mouseY);
+			//symbol.flee(mouse);
+				}
 		}
-	}
-}
+	
+};//einde Stream
 

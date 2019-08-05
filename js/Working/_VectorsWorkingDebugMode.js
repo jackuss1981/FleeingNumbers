@@ -1,4 +1,5 @@
 let streams = [];
+let fadeInterval = 1.6;
 let symbolSize = 14;
 
 function setup() {
@@ -8,13 +9,13 @@ function setup() {
   );
   background(0);
 
-  let x = 0;
-		
-  for (let i = 0; i <= width / symbolSize; i++){
-	  
+  //let x = 0;
+		let x = width /2;
+  //for (let i = 0; i <= width / symbolSize; i++) {
+    for (let i = 0; i <=2;i++) {	
 		let stream = new Stream();
-	stream.generateSymbols(x, random(-2000, 0));
-    
+    //stream.generateSymbols(x, random(-2000, 0));
+    stream.generateSymbols(x, height / 2);
     streams.push(stream);
     x += symbolSize
   }
@@ -30,3 +31,12 @@ function draw() {
   });
 }
 
+function mousePressed() {
+	loop();
+}
+
+
+function mouseReleased() {
+	noLoop();
+	
+}
