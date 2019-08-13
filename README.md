@@ -8,6 +8,6 @@ For a working example, see here http://coding.jackuss.nl/FleeingNumbers/index.ht
 
 TO DO:
   - Make it consume less memory.
-	- Make some numbers lighter than others.
-	- After the mouse is away, let all numbers go back in a nice row one behind the other.
+  - Make some numbers lighter than others.
+  - After the mouse is away, let all numbers go back in a nice row one behind the other.
 	
