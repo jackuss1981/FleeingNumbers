@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /* ======================================================================
    Naam Script  : BitRain
 	 Naam         : Jack Reinieren
@@ -19,6 +18,7 @@ class Symbol {
 		this.y = y;
 		this.downForce = downForce;
 		this.first = first;
+		
 		this.value;
 		this.switchInterval = round(random(2,20));
 		this.pos = createVector(this.x, this.y);
