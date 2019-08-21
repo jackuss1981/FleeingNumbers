@@ -78,7 +78,7 @@ class QuadTree {
   show() {
     stroke(255);
     noFill();
-    strokeWeight(1);
+    strokeWeight(4);
     rectMode(CENTER);
     rect(this.boundary.x, this.boundary.y, this.boundary.w * 2, this.boundary.h * 2);
     for (let p of this.numbers) {
